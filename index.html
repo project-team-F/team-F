@@ -58,7 +58,7 @@
         var opt = {
             "enableHighAccuracy": true,
             "timeout": 10000,
-            "maximumAge": 0,
+            "maximumAge": 5000,
         };
         navigator.geolocation.watchPosition(setLocation, showErr, opt);
     }else{
