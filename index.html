@@ -31,66 +31,6 @@
             center: myLatlng
          };
          map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-
-         // CSVファイルのURL (RawデータURLを使用)
-         var csvFile = "https://raw.githubusercontent.com/project-team-F/team-F/main/data.csv";
-
-         // CSVデータを読み込んでマーカーを表示
-         loadCSVDataAndAddMarkers(csvFile);
-      }
-
-      function loadCSVDataAndAddMarkers(csvFile) {
-         fetch(csvFile)
-            .then(response => response.text())
-            .then(data => {
-               var rows = data.split("\n");
-
-               for (var i = 1; i < rows.length; i++) {
-                  var cols = rows[i].split("\t"); // タブで列を分割
-                  var latitudeStr = cols[0];
-                  var longitudeStr = cols[1];
-
-                  // ピリオドで連結された度、分、秒を浮動小数点数に変換
-                  var latitude = convertDMSStringToDecimal(latitudeStr);
-                  var longitude = convertDMSStringToDecimal(longitudeStr);
-
-                  if (!isNaN(latitude) && !isNaN(longitude)) {
-                     var location = new google.maps.LatLng(latitude, longitude);
-                     var marker = new google.maps.Marker({
-                        position: location,
-                        map: map
-                     });
-
-                     // テーブルにデータを追加
-                     setInfo(cols[2], latitude, longitude, cols[3]);
-                  }
-               }
-            });
-      }
-
-      function setInfo(timeStamp, latitude, longitude, accuracy) {
-         var tableRef = document.getElementById('tblGps');
-         var newRow = tableRef.insertRow(1);
-         var newCellTime = newRow.insertCell(0);
-         var newCellLat = newRow.insertCell(1);
-         var newCellLng = newRow.insertCell(2);
-         var newCellAcr = newRow.insertCell(3);
-         newCellTime.innerHTML = timeStamp;
-         newCellLat.innerHTML = latitude;
-         newCellLng.innerHTML = longitude;
-         newCellAcr.innerHTML = accuracy;
-      }
-
-      // ピリオドで連結された度、分、秒の文字列を浮動小数点数に変換
-      function convertDMSStringToDecimal(dmsString) {
-         var parts = dmsString.split('.');
-         if (parts.length !== 4) return NaN;
-
-         var degrees = parseInt(parts[0]);
-         var minutes = parseInt(parts[1]);
-         var seconds = parseFloat(parts[2] + '.' + parts[3]);
-
-         return degrees + minutes / 60 + seconds / 3600;
       }
 
       function startWatchPosition() {
@@ -132,6 +72,19 @@
       function error(err) {
          document.getElementById('tdErrCd').innerHTML = err.code;
          document.getElementById('tdErrMg').innerHTML = err.message;
+      }
+
+      function setInfo(timeStamp, latitude, longitude, accuracy) {
+         var tableRef = document.getElementById('tblGps');
+         var newRow = tableRef.insertRow(1);
+         var newCellTime = newRow.insertCell(0);
+         var newCellLat = newRow.insertCell(1);
+         var newCellLng = newRow.insertCell(2);
+         var newCellAcr = newRow.insertCell(3);
+         newCellTime.innerHTML = timeStamp;
+         newCellLat.innerHTML = latitude;
+         newCellLng.innerHTML = longitude;
+         newCellAcr.innerHTML = accuracy;
       }
    </script>
 </head>
