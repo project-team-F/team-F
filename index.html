@@ -99,51 +99,6 @@
       }
    </script>
 
-<script type="text/javascript">
-   function initMap() {
-      // 以前のinitMap関数の内容をそのまま保持
-
-      // CSVデータのURL（GitHubのRawデータURLを使用）
-      var csvDataUrl = 'https://github.com/project-team-F/team-F/blob/main/data.csv';
-
-      // CSVデータを非同期で読み込み
-      fetch(csvDataUrl)
-         .then(response => response.text())
-         .then(data => {
-            // CSVデータを処理し、マーカーを追加
-            processData(data);
-         })
-         .catch(error => console.error('Error fetching CSV data: ' + error));
-   }
-
-   function processData(data) {
-      // CSVデータを改行で分割
-      var lines = data.split('\n');
-
-      // ループを使用して各行を処理
-      for (var i = 0; i < lines.length; i++) {
-         var line = lines[i].trim();
-
-         // CSVデータをカンマで分割
-         var parts = line.split(',');
-
-         // 必要な情報が含まれているか確認
-         if (parts.length >= 2) {
-            var lat = parseFloat(parts[0]);
-            var lng = parseFloat(parts[1]);
-
-            // 緯度と経度が有効な場合、マーカーを追加
-            if (!isNaN(lat) && !isNaN(lng)) {
-               var position = new google.maps.LatLng(lat, lng);
-               var marker = new google.maps.Marker({
-                  position: position,
-                  map: map,
-               });
-            }
-         }
-      }
-   }
-</script>
 
    
 </head>
