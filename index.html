@@ -95,19 +95,44 @@
 
       function startWatchPosition() {
          if (navigator.geolocation) {
-            // 位置情報取得成功時のコールバック関数を指定して getCurrentPosition を呼び出す
-            navigator.geolocation.getCurrentPosition(success, error);
+            // 位置情報を定期的にトラッキングし、成功時とエラー時のコールバックを指定
+            id = navigator.geolocation.watchPosition(success, error);
          } else {
             alert("このブラウザは位置情報をサポートしていません。");
          }
       }
 
       function success(pos) {
-         // 位置情報の取得に成功した場合の処理をここに追加
+         var crd = pos.coords;
+         var timeStamp = pos.timestamp;
+
+         var currentPos = new google.maps.LatLng(crd.latitude, crd.longitude);
+
+         if (marker !== undefined) marker.setMap(null);
+         if (circle !== undefined) circle.setMap(null);
+
+         marker = new google.maps.Marker({ position: currentPos, map: map });
+
+         circle = new google.maps.Circle({
+            strokeColor: "#3333FF",
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: "#3333FF",
+            fillOpacity: 0.35,
+            map: map,
+            draggable: false,
+            center: currentPos,
+            radius: crd.accuracy
+         });
+
+         map.setCenter(currentPos);
+         map.setZoom(14);
+         setInfo(timeStamp, crd);
       }
 
       function error(err) {
-         // 位置情報の取得中にエラーが発生した場合の処理をここに追加
+         document.getElementById('tdErrCd').innerHTML = err.code;
+         document.getElementById('tdErrMg').innerHTML = err.message;
       }
    </script>
 </head>
