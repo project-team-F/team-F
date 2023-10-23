@@ -31,6 +31,12 @@
             center: myLatlng
          };
          map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+         
+         // CSVファイルのURL (RawデータURLを使用)
+         var csvFile = "https://raw.githubusercontent.com/project-team-F/team-F/main/data.csv";
+
+         // CSVデータを読み込んでマーカーを表示
+         loadCSVDataAndAddMarkers(csvFile);
       }
 
       function loadCSVDataAndAddMarkers(csvFile) {
