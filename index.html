@@ -93,14 +93,22 @@
          return degrees + minutes / 60 + seconds / 3600;
       }
 
-function startWatchPosition() {
-   if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(success, error);
-   } else {
-      alert("このブラウザは位置情報をサポートしていません。");
-   }
-}
+      function startWatchPosition() {
+         if (navigator.geolocation) {
+            // 位置情報取得成功時のコールバック関数を指定して getCurrentPosition を呼び出す
+            navigator.geolocation.getCurrentPosition(success, error);
+         } else {
+            alert("このブラウザは位置情報をサポートしていません。");
+         }
+      }
 
+      function success(pos) {
+         // 位置情報の取得に成功した場合の処理をここに追加
+      }
+
+      function error(err) {
+         // 位置情報の取得中にエラーが発生した場合の処理をここに追加
+      }
    </script>
 </head>
 <body>
