@@ -92,6 +92,15 @@
 
          return degrees + minutes / 60 + seconds / 3600;
       }
+
+function startWatchPosition() {
+   if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(success, error);
+   } else {
+      alert("このブラウザは位置情報をサポートしていません。");
+   }
+}
+
    </script>
 </head>
 <body>
