@@ -62,7 +62,7 @@
                      });
 
                      // テーブルにデータを追加
-                     setInfo("Timestamp", latitude, longitude, "0m");
+                     setInfo(cols[2], latitude, longitude, cols[3]);
                   }
                }
             });
@@ -104,8 +104,7 @@
 
       function success(pos) {
          var crd = pos.coords;
-         var timeStamp = pos.timestamp;
-
+         var timeStamp = new Date(pos.timestamp).toLocaleTimeString();
          var currentPos = new google.maps.LatLng(crd.latitude, crd.longitude);
 
          if (marker !== undefined) marker.setMap(null);
@@ -127,7 +126,7 @@
 
          map.setCenter(currentPos);
          map.setZoom(14);
-         setInfo(timeStamp, crd);
+         setInfo(timeStamp, crd.latitude, crd.longitude, crd.accuracy);
       }
 
       function error(err) {
