@@ -147,8 +147,7 @@
                      var distance = calculateDistance(userLat, userLon, latitude, longitude);
                      if (distance < 0.1) { // 100メートル以内の場合（0.1キロメートル）
                         if (!notificationShown) {
-                           audio.play(); // 音声を再生
-                           showNotification("この先に注意してください"); // 通知メッセージを表示
+                           requestNotificationPermission(); // 通知の許可を要求
                            notificationShown = true;
                         }
                      }
@@ -157,16 +156,26 @@
             });
       }
 
+      function requestNotificationPermission() {
+         if ('Notification' in window) {
+            if (Notification.permission !== 'granted') {
+               Notification.requestPermission(function (permission) {
+                  if (permission === 'granted') {
+                     showNotification("この先に注意してください"); // 通知メッセージを表示
+                     audio.play(); // 音声を再生
+                  }
+               });
+            } else {
+               showNotification("この先に注意してください"); // 通知メッセージを表示
+               audio.play(); // 音声を再生
+            }
+         }
+      }
+
       function showNotification(message) {
          if ('Notification' in window) {
             if (Notification.permission === 'granted') {
                new Notification(message);
-            } else if (Notification.permission !== 'denied') {
-               Notification.requestPermission(function (permission) {
-                  if (permission === 'granted') {
-                     new Notification(message);
-                  }
-               });
             }
          }
       }
@@ -208,4 +217,3 @@
    </p>
 </body>
 </html>
-
