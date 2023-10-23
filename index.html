@@ -31,6 +31,50 @@
             center: myLatlng
          };
          map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
+         // CSVファイルのURL (RawデータURLを使用)
+         var csvFile = "https://raw.githubusercontent.com/project-team-F/team-F/main/data.csv";
+
+         // CSVデータを読み込んでマーカーを表示
+         loadCSVDataAndAddMarkers(csvFile);
+      }
+
+      function loadCSVDataAndAddMarkers(csvFile) {
+         fetch(csvFile)
+            .then(response => response.text())
+            .then(data => {
+               var rows = data.split("\n");
+
+               for (var i = 1; i < rows.length; i++) {
+                  var cols = rows[i].split("\t"); // タブで列を分割
+                  var latitudeStr = cols[0];
+                  var longitudeStr = cols[1];
+
+                  // ピリオドで連結された度、分、秒を浮動小数点数に変換
+                  var latitude = convertDMSStringToDecimal(latitudeStr);
+                  var longitude = convertDMSStringToDecimal(longitudeStr);
+
+                  if (!isNaN(latitude) && !isNaN(longitude)) {
+                     var location = new google.maps.LatLng(latitude, longitude);
+                     var marker = new google.maps.Marker({
+                        position: location,
+                        map: map
+                     });
+                  }
+               }
+            });
+      }
+
+      // ピリオドで連結された度、分、秒の文字列を浮動小数点数に変換
+      function convertDMSStringToDecimal(dmsString) {
+         var parts = dmsString.split('.');
+         if (parts.length !== 4) return NaN;
+
+         var degrees = parseInt(parts[0]);
+         var minutes = parseInt(parts[1]);
+         var seconds = parseFloat(parts[2] + '.' + parts[3]);
+
+         return degrees + minutes / 60 + seconds / 3600;
       }
 
       function startWatchPosition() {
@@ -108,3 +152,4 @@
    </p>
 </body>
 </html>
+
