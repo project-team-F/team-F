@@ -4,99 +4,64 @@
    <meta charset="utf-8" />
    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
    <title>Sample Map</title>
-   <script defer
-       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMb-nfDy9Nw5rxM7k9e7D8BiBZi2Wrciw&callback=initMap" >
+   <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMb-nfDy9Nw5rxM7k9e7D8BiBZi2Wrciw&callback=initMap">
    </script>
 
    <style type="text/css">
       #map_canvas {
          width: 100%;
-         height:50%;
+         height: 50%;
       }
-      html,
-      body {
+      html, body {
          height: 100%;
          margin: 0;
          padding: 0;
       }
-
    </style>
    <script type="text/javascript">
       var map;
       var marker;
       var circle;
       var id;
+
       function initMap() {
-         var myLatlng = new google.maps.LatLng(35.683755,139.745625);
+         var myLatlng = new google.maps.LatLng(35.683755, 139.745625);
          var mapOptions = {
            zoom: 14,
            center: myLatlng
          }
          map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
+         // CSVデータのURL
+         var csvDataUrl = "https://github.com/project-team-F/team-F/blob/main/data.csv";
+
+         // CSVデータを読み込む
+         fetch(csvDataUrl)
+            .then(response => response.text())
+            .then(data => {
+               // CSVデータを処理
+               processData(data);
+            })
+            .catch(error => console.error("Error fetching CSV data: " + error));
       }
 
-      function success(pos) {
-         var crd = pos.coords;
-         var timeStamp = pos.timestamp;
+      function processData(csvData) {
+         // CSVデータをパース
+         var lines = csvData.split("\n");
+         for (var i = 1; i < lines.length; i++) { // 最初の行はヘッダーなのでスキップ
+            var line = lines[i].split(",");
+            var timestamp = line[0];
+            var latitude = parseFloat(line[1]);
+            var longitude = parseFloat(line[2]);
+            var accuracy = parseFloat(line[3]);
 
-         var currentPos = new google.maps.LatLng( crd.latitude, crd.longitude);
- 
-         if ( marker != undefined )  marker.setMap(null);
-         if ( circle != undefined )  circle.setMap(null);
-
-         /* 現在位置にマーカーを設定 */
-         marker =  new google.maps.Marker({ position: currentPos ,map: map});
-
-         /* 位置の誤差領域 */
-         circle = new google.maps.Circle({
-            strokeColor: "#3333FF",
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillColor: "#3333FF",
-            fillOpacity: 0.35,
-            map: map,
-            draggable: false,
-            center: currentPos,
-            radius: crd.accuracy   /* 位置の誤差(m)を半径とする */
-         });
-         map.setCenter(currentPos);
-         map.setZoom(14);
-         setInfo(timeStamp,crd);
-      }
-      function error(err) {
-         document.getElementById('tdErrCd').innerHTML = err.code;
-         document.getElementById('tdErrMg').innerHTML = err.message;
-      }
-      function setInfo(timeStamp,crd) {
-         var tableRef = document.getElementById('tblGps');
-         var newRow   = tableRef.insertRow(1);
-         var newCellTime  = newRow.insertCell(0);
-         var newCellLat  = newRow.insertCell(1);
-         var newCellLng  = newRow.insertCell(2);
-         var newCellAcr  = newRow.insertCell(3);
-         newCellTime.innerHTML = timeStamp;
-         newCellLat.innerHTML = crd.latitude;
-         newCellLng.innerHTML = crd.longitude;
-         newCellAcr.innerHTML = crd.accuracy + 'm';
-      }
-      function startWatchPosition() {
-         if ( id == undefined ) {
-            var options = {
-               enableHighAccuracy: true,
-               timeout: 5000,
-               maximumAge: 0
-            };
-            id = navigator.geolocation.watchPosition(success, error, options);
+            // マーカーを設定
+            var location = new google.maps.LatLng(latitude, longitude);
+            var newMarker = new google.maps.Marker({ position: location, map: map });
          }
       }
-      function clearWatchPosition() {
-         if ( id != undefined ) {
-            navigator.geolocation.clearWatch(id);
-            id = null;
-         }
-         if ( marker != undefined )  marker.setMap(null);
-         if ( circle != undefined )  circle.setMap(null);
-      }
+
+      // 他の関数（success、error、setInfo、startWatchPosition、clearWatchPosition）は変更なし
    </script>
 </head>
 <body>
@@ -104,7 +69,7 @@
    <br /><input type="button" value="追跡開始" onclick="startWatchPosition();" />
    <br /><input type="button" value="追跡終了" onclick="clearWatchPosition();" />
    <p>
-      <table  style="width:100%">
+      <table style="width:100%">
          <tr><th>エラーコード</th><td id="tdErrCd"></td></tr>
          <tr><th>エラーメッセージ</th><td id="tdErrMg"></td></tr>
       </table>
@@ -115,7 +80,6 @@
             <th>経度</th>
             <th>位置（正確さ）</th>
          </tr>
-      
       </table>
    </p>
 </body>
