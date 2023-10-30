@@ -78,7 +78,10 @@
 
       function startWatchPosition() {
          if (navigator.geolocation) {
-            id = navigator.geolocation.watchPosition(success, error);
+            var options = {
+               enableHighAccuracy: true, // この行を追加
+            };
+            id = navigator.geolocation.watchPosition(success, error, options);
          } else {
             alert("このブラウザは位置情報をサポートしていません。");
          }
