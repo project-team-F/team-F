@@ -87,6 +87,15 @@
          }
       }
 
+      function clearWatchPosition() {
+         if ( id != undefined ) {
+            navigator.geolocation.clearWatch(id);
+            id = null;
+         }
+         if ( marker != undefined )  marker.setMap(null);
+         if ( circle != undefined )  circle.setMap(null);
+      }
+
       function success(pos) {
          var crd = pos.coords;
          var timeStamp = new Date(pos.timestamp).toLocaleTimeString();
