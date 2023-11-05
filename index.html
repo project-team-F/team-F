@@ -23,6 +23,19 @@
       var marker;
       var circle;
       var id;
+      var audio = new Audio();
+      function init() {
+         audio.src = "./button.wav";
+         audio.load();
+      }
+
+      function play() {
+         audio.play();
+      }
+
+      init();
+      var notificationShown = false;
+
 
       function initMap() {
          var myLatlng = new google.maps.LatLng(35.683755, 139.745625);
@@ -82,6 +95,15 @@
          } else {
             alert("このブラウザは位置情報をサポートしていません。");
          }
+      }
+      
+      function clearWatchPosition() {
+         if ( id != undefined ) {
+            navigator.geolocation.clearWatch(id);
+            id = null;
+         }
+         if ( marker != undefined )  marker.setMap(null);
+         if ( circle != undefined )  circle.setMap(null);
       }
 
       function success(pos) {
@@ -151,6 +173,30 @@
                   }
                }
             });
+      }
+      
+      function requestNotificationPermission() {
+         if ('Notification' in window) {
+            if (Notification.permission !== 'granted') {
+               Notification.requestPermission(function (permission) {
+                  if (permission === 'granted') {
+                     showNotification("この先に注意してください"); // 通知メッセージを表示
+                     audio.play(); // 音声を再生
+                  }
+               });
+            } else {
+               showNotification("この先に注意してください"); // 通知メッセージを表示
+               audio.play(); // 音声を再生
+            }
+         }
+      }
+      
+      function showNotification(message) {
+         if ('Notification' in window) {
+            if (Notification.permission === 'granted') {
+               new Notification(message);
+            }
+         }
       }
 
       function calculateDistance(lat1, lon1, lat2, lon2) {
