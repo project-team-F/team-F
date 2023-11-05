@@ -167,7 +167,7 @@
                   var longitude = convertPeriodToDMS(longitudeStr);
                   if (!isNaN(latitude) && !isNaN(longitude)) {
                      var distance = calculateDistance(userLat, userLon, latitude, longitude);
-                     if (distance < 0.1) { // 100メートル以内の場合（0.1キロメートル）
+                     if (distance < 1) { // 100メートル以内の場合（0.1キロメートル）
                         // 通知や音声の機能は削除されています
                      }
                   }
