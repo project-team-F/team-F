@@ -24,9 +24,6 @@
       var circle;
       var id;
 
-      var audio = new Audio('https://github.com/project-team-F/team-F/blob/main/button.wav'); // 音声ファイルへのパスを指定してください
-      var notificationShown = false;
-
       function initMap() {
          var myLatlng = new google.maps.LatLng(35.683755, 139.745625);
          var mapOptions = {
@@ -87,15 +84,6 @@
          }
       }
 
-      function clearWatchPosition() {
-         if ( id != undefined ) {
-            navigator.geolocation.clearWatch(id);
-            id = null;
-         }
-         if ( marker != undefined )  marker.setMap(null);
-         if ( circle != undefined )  circle.setMap(null);
-      }
-
       function success(pos) {
          var crd = pos.coords;
          var timeStamp = new Date(pos.timestamp).toLocaleTimeString();
@@ -119,7 +107,7 @@
          });
 
          map.setCenter(currentPos);
-         map.setZoom(16);
+         map.setZoom(14);
          setInfo(timeStamp, crd.latitude, crd.longitude, crd.accuracy);
 
          checkDistance(crd.latitude, crd.longitude);
@@ -158,38 +146,11 @@
                   if (!isNaN(latitude) && !isNaN(longitude)) {
                      var distance = calculateDistance(userLat, userLon, latitude, longitude);
                      if (distance < 0.1) { // 100メートル以内の場合（0.1キロメートル）
-                        if (!notificationShown) {
-                           requestNotificationPermission(); // 通知の許可を要求
-                           notificationShown = true;
-                        }
+                        // 通知や音声の機能は削除されています
                      }
                   }
                }
             });
-      }
-
-      function requestNotificationPermission() {
-         if ('Notification' in window) {
-            if (Notification.permission !== 'granted') {
-               Notification.requestPermission(function (permission) {
-                  if (permission === 'granted') {
-                     showNotification("この先に注意してください"); // 通知メッセージを表示
-                     audio.play(); // 音声を再生
-                  }
-               });
-            } else {
-               showNotification("この先に注意してください"); // 通知メッセージを表示
-               audio.play(); // 音声を再生
-            }
-         }
-      }
-
-      function showNotification(message) {
-         if ('Notification' in window) {
-            if (Notification.permission === 'granted') {
-               new Notification(message);
-            }
-         }
       }
 
       function calculateDistance(lat1, lon1, lat2, lon2) {
