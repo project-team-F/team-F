@@ -17,8 +17,26 @@
          padding: 0;
       }
    </style>
-
-   <script type="text/javascript">
+</head>
+<body>
+   <div id="map_canvas"></div>
+   <br /><input type="button" value="追跡開始" onclick="startWatchPosition();" />
+   <br /><input type="button" value="追跡終了" onclick="clearWatchPosition();" />
+   <p>
+      <table  style="width:100%">
+         <tr><th>エラーコード</th><td id="tdErrCd"></td></tr>
+         <tr><th>エラーメッセージ</th><td id="tdErrMg"></td></tr>
+      </table>
+      <table style="width:100%" id="tblGps">
+         <tr>
+            <th>タイムスタンプ</th>
+            <th>緯度</th>
+            <th>経度</th>
+            <th>位置（正確さ）</th>
+         </tr>
+      </table>
+   </p>
+<script type="text/javascript">
       var map;
       var marker;
       var circle;
@@ -218,24 +236,5 @@
          return dist;
       }
    </script>
-</head>
-<body>
-   <div id="map_canvas"></div>
-   <br /><input type="button" value="追跡開始" onclick="startWatchPosition();" />
-   <br /><input type="button" value="追跡終了" onclick="clearWatchPosition();" />
-   <p>
-      <table  style="width:100%">
-         <tr><th>エラーコード</th><td id="tdErrCd"></td></tr>
-         <tr><th>エラーメッセージ</th><td id="tdErrMg"></td></tr>
-      </table>
-      <table style="width:100%" id="tblGps">
-         <tr>
-            <th>タイムスタンプ</th>
-            <th>緯度</th>
-            <th>経度</th>
-            <th>位置（正確さ）</th>
-         </tr>
-      </table>
-   </p>
 </body>
 </html>
