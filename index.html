@@ -89,7 +89,9 @@
       function startWatchPosition() {
          if (navigator.geolocation) {
             var options = {
-               enableHighAccuracy: true, // この行を追加
+               enableHighAccuracy: true,
+               timeout: 5000,
+               maximumAge: 0,// この行を追加
             };
             id = navigator.geolocation.watchPosition(success, error, options);
          } else {
