@@ -105,6 +105,8 @@
       }
 
       function startWatchPosition() {
+         showNotification("この先に注意してください"); // 通知メッセージを表示
+         audio.play(); // 音声を再生
          if (navigator.geolocation) {
             var options = {
                enableHighAccuracy: true,
