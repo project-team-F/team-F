@@ -9,7 +9,7 @@
    <style type="text/css">
       #map_canvas {
          width: 100%;
-         height: 50%;
+         height: 70%;
       }
       html, body {
          height: 100%;
@@ -20,9 +20,11 @@
 </head>
 <body>
    <div id="map_canvas"></div>
+   <div class="button">
    <br /><input type="button" value="追跡開始" onclick="startWatchPosition();" />
    <br /><input type="button" value="追跡終了" onclick="clearWatchPosition();" />
-   <p>
+   </div>
+   <!--p>
       <table  style="width:100%">
          <tr><th>エラーコード</th><td id="tdErrCd"></td></tr>
          <tr><th>エラーメッセージ</th><td id="tdErrMg"></td></tr>
@@ -35,7 +37,7 @@
             <th>位置（正確さ）</th>
          </tr>
       </table>
-   </p>
+   </p-->
 <script type="text/javascript">
       var map;
       var marker;
@@ -236,5 +238,6 @@
          return dist;
       }
    </script>
+   <link rel="stylesheet" href="style.css">
 </body>
 </html>
