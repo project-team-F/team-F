@@ -26,14 +26,6 @@ input{
     background: #4d4a4a;
     color: white;
   }
-body {
-    font-family: 'Montserrat', sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    background-color: #f8f9fa;
-    color: #495057;
-}
 
 header {
     background-color: #343a40;
