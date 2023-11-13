@@ -20,3 +20,95 @@ input{
     background: #4d4a4a;
     color: white;
   }
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f8f9fa;
+    color: #495057;
+}
+
+header {
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+    padding: 1em;
+}
+
+main {
+    text-align: center;
+    margin: 2em 0;
+}
+
+.intro-section {
+    background-color: #ffffff;
+    padding: 2em;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 2em auto;
+}
+
+.intro-section h2 {
+    color: #343a40;
+}
+
+.intro-section p {
+    font-size: 1.2em;
+    color: #6c757d;
+    margin-bottom: 1em;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 1em 2em;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 0.5em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.secondary {
+    background-color: #ffffff;
+    color: #007bff;
+    border: 2px solid #007bff;
+}
+
+.cta-button:hover {
+    background-color: #0056b3;
+}
+
+.features-section {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2em;
+}
+
+.feature {
+    flex: 0 1 45%;
+    margin: 1em;
+    padding: 1em;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.feature h3 {
+    color: #007bff;
+}
+
+footer {
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+    padding: 1em;
+}
+
+
