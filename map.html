@@ -69,16 +69,16 @@ window.console.log = text => {
       var marker;
       var circle;
       var id;
-      var audio = new Audio();
-      function init() {
+      var audio = new Audio('./button.wav');
+      /*function init() {
          audio.src = "./button.wav";
          audio.load();
-      }
+      }*/
 
       function play() {
          audio.play();
       }
-      init();
+      //init();
       var notificationShown = false;
 
 
@@ -224,7 +224,7 @@ window.console.log = text => {
             });
       }
       
-      function requestNotificationPermission() {
+      /*function requestNotificationPermission() {
          if ('Notification' in window) {
             if (Notification.permission !== 'granted') {
                Notification.requestPermission(function (permission) {
@@ -246,7 +246,7 @@ window.console.log = text => {
                new Notification(message);
             }
          }
-      }
+      }*/
 
       function calculateDistance(lat1, lon1, lat2, lon2) {
          var radlat1 = (Math.PI * lat1) / 180;
