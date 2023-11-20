@@ -136,7 +136,7 @@ window.console.log = text => {
             var options = {
                enableHighAccuracy: true,
                timeout: 5000,
-               maximumAge: 100,// この行を追加
+               maximumAge: 3000,// 1で0.001秒
             };
             id = navigator.geolocation.watchPosition(success, error, options);
          } else {
