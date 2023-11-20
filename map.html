@@ -78,7 +78,7 @@ window.console.log = text => {
       function play() {
          audio.play();
       }
-
+      play();
       init();
       var notificationShown = false;
 
@@ -217,7 +217,7 @@ window.console.log = text => {
                      var distance = calculateDistance(userLat, userLon, latitude, longitude);
                      if (distance < 0.1) { // 100メートル以内の場合（0.1キロメートル）
                         console.log(distance);
-                        play(); // 通知の許可を要求
+                        audio.play(); // 通知の許可を要求
                         notificationShown = true;
                      }
                   }
