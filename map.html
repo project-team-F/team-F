@@ -132,7 +132,7 @@ window.console.log = text => {
       }
 
       function startWatchPosition() {
-         audio.play();
+         //audio.play();
          if (navigator.geolocation) {
             var options = {
                enableHighAccuracy: true,
@@ -202,6 +202,7 @@ window.console.log = text => {
       }
 
       function checkDistance(userLat, userLon) {
+         audio.play();
          var csvFile = "https://raw.githubusercontent.com/project-team-F/team-F/main/data.csv";
          fetch(csvFile)
             .then(response => response.text())
@@ -215,7 +216,7 @@ window.console.log = text => {
                   var longitude = convertPeriodToDMS(longitudeStr);
                   if (!isNaN(latitude) && !isNaN(longitude)) {
                      var distance = calculateDistance(userLat, userLon, latitude, longitude);
-                     if (distance < 0.00001) { // 100メートル以内の場合（0.1キロメートル）
+                     if (distance < 0.1) { // 100メートル以内の場合（0.1キロメートル）
                         console.log(distance);
                         audio.play(); // 通知の許可を要求
                         notificationShown = true;
