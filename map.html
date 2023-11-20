@@ -215,7 +215,7 @@ window.console.log = text => {
                   var longitude = convertPeriodToDMS(longitudeStr);
                   if (!isNaN(latitude) && !isNaN(longitude)) {
                      var distance = calculateDistance(userLat, userLon, latitude, longitude);
-                     if (distance < 2) { // 100メートル以内の場合（0.1キロメートル）
+                     if (distance < 0.00001) { // 100メートル以内の場合（0.1キロメートル）
                         console.log(distance);
                         audio.play(); // 通知の許可を要求
                         notificationShown = true;
