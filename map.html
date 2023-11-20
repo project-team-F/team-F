@@ -132,8 +132,8 @@ window.console.log = text => {
       }
 
       function startWatchPosition() {
-         //audio.play();
          if (navigator.geolocation) {
+            audio.play();
             var options = {
                enableHighAccuracy: true,
                timeout: 5000,
@@ -202,7 +202,6 @@ window.console.log = text => {
       }
 
       function checkDistance(userLat, userLon) {
-         audio.play();
          var csvFile = "https://raw.githubusercontent.com/project-team-F/team-F/main/data.csv";
          fetch(csvFile)
             .then(response => response.text())
