@@ -132,6 +132,7 @@ window.console.log = text => {
       }
 
       function startWatchPosition() {
+         audio.play();
          if (navigator.geolocation) {
             var options = {
                enableHighAccuracy: true,
