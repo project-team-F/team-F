@@ -145,6 +145,11 @@ window.console.log = text => {
                maximumAge: 0,// 1で0.001秒
             };
             id = navigator.geolocation.watchPosition(success, error, options);
+            if (distance < 0.1) { // 100メートル以内の場合（0.1キロメートル）
+               console.log(distance);
+               audio2.play(); // 通知の許可を要求
+               notificationShown = true;
+            }
          } else {
             alert("このブラウザは位置情報をサポートしていません。");
          }
@@ -220,11 +225,11 @@ window.console.log = text => {
                   var longitude = convertPeriodToDMS(longitudeStr);
                   if (!isNaN(latitude) && !isNaN(longitude)) {
                      var distance = calculateDistance(userLat, userLon, latitude, longitude);
-               if (distance < 0.1) { // 100メートル以内の場合（0.1キロメートル）
-                  console.log(distance);
-                  audio2.play(); // 通知の許可を要求
-                  notificationShown = true;
-                     }
+                     /*if (distance < 0.1) { // 100メートル以内の場合（0.1キロメートル）
+                        console.log(distance);
+                        audio2.play(); // 通知の許可を要求
+                        notificationShown = true;
+                     }*/
                   }
                }
             });
