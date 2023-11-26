@@ -70,6 +70,7 @@ window.console.log = text => {
       var circle;
       var id;
       var audio = new Audio('./button.wav');
+      var audio2 = new Audio('./tyuui.mp3');
       /*function init() {
          audio.src = "./button.wav";
          audio.load();
@@ -77,6 +78,10 @@ window.console.log = text => {
 
       function play() {
          audio.play();
+      }
+   
+      function play2() {
+         audio2.play();
       }
       //init();
       var notificationShown = false;
@@ -217,7 +222,7 @@ window.console.log = text => {
                      var distance = calculateDistance(userLat, userLon, latitude, longitude);
                      if (distance < 0.1) { // 100メートル以内の場合（0.1キロメートル）
                         console.log(distance);
-                        audio.play(); // 通知の許可を要求
+                        audio2.play(); // 通知の許可を要求
                         notificationShown = true;
                      }
                   }
