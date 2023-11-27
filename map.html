@@ -42,17 +42,12 @@
 <script type="text/javascript">
    
 window.console.log = text => {
-  // 初回は表示用の要素を作成
   if (!$('#console').length) {
-    // 画面下部に固定表示する
-   $('<div id="console"></div>') 
+    $('<div id="console"></div>')
      .appendTo($('body'))
      .css({
-      //position: 'fixed',
       bottom: 0,
       left: 0,
-      //width: '100%',
-      //height: '100px',
       padding: '8px',
       background: 'rgba(0,0,0,0.7)',
       fontSize: '10px',
@@ -60,216 +55,191 @@ window.console.log = text => {
       zIndex: 1000000
     });
   }
-
-  //consoleに本来出力される内容を表示していく
   $('#console').prepend(`${text}<br>`);
 };
    
-      var map;
-      var marker;
-      var circle;
-      var id;
-      var audio = new Audio('./button.wav');
-      var audio2 = new Audio('./tyuui.mp3');
-      /*function init() {
-         audio.src = "./button.wav";
-         audio.load();
-      }*/
+var map;
+var marker;
+var circle;
+var id;
+var audio = new Audio('./button.wav');
+var audio2 = new Audio('./tyuui.mp3');
+var notificationShown = false;
+var playCount = 0; // 新しい変数を追加
 
-      function play() {
-         audio.play();
-      }
-   
-      function play2() {
-         audio2.play();
-      }
-      //init();
-      var notificationShown = false;
+function play() {
+   audio.play();
+}
 
+function play2() {
+   audio2.play();
+   playCount++; // 再生回数をインクリメント
+   if (playCount >= 2) { // 2回以上再生された場合は再生を停止
+      audio2.pause();
+      audio2.currentTime = 0;
+   }
+}
 
-      function initMap() {
-         var myLatlng = new google.maps.LatLng(35.683755, 139.745625);
-         var mapOptions = {
-            zoom: 14,
-            center: myLatlng
-         };
-         map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+function initMap() {
+   var myLatlng = new google.maps.LatLng(35.683755, 139.745625);
+   var mapOptions = {
+      zoom: 14,
+      center: myLatlng
+   };
+   map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
 
-         var csvFile = "https://raw.githubusercontent.com/project-team-F/team-F/main/data.csv";
-         loadCSVDataAndAddMarkers(csvFile);
-      }
+   var csvFile = "https://raw.githubusercontent.com/project-team-F/team-F/main/data.csv";
+   loadCSVDataAndAddMarkers(csvFile);
+}
 
-      function loadCSVDataAndAddMarkers(csvFile) {
-         fetch(csvFile)
-            .then(response => response.text())
-            .then(data => {
-               var rows = data.split("\n");
+function loadCSVDataAndAddMarkers(csvFile) {
+   fetch(csvFile)
+      .then(response => response.text())
+      .then(data => {
+         var rows = data.split("\n");
 
-               for (var i = 0; i < rows.length; i++) {
-                  var cols = rows[i].split(",");
+         for (var i = 0; i < rows.length; i++) {
+            var cols = rows[i].split(",");
 
-                  var latitudeStr = cols[0];
-                  var longitudeStr = cols[1];
+            var latitudeStr = cols[0];
+            var longitudeStr = cols[1];
 
-                  var latitude = convertPeriodToDMS(latitudeStr);
-                  var longitude = convertPeriodToDMS(longitudeStr);
+            var latitude = convertPeriodToDMS(latitudeStr);
+            var longitude = convertPeriodToDMS(longitudeStr);
 
-                  if (!isNaN(latitude) && !isNaN(longitude)) {
-                     var location = new google.maps.LatLng(latitude, longitude);
-                     var marker = new google.maps.Marker({
-                        position: location,
-                        map: map
-                     });
-                  }
-               }
-            });
-      }
-
-      function convertPeriodToDMS(periodString) {
-         var parts = periodString.split('.');
-         if (parts.length !== 4) return NaN;
-
-         var degrees = parseInt(parts[0]);
-         var minutes = parseInt(parts[1]);
-         var seconds = parseFloat(parts[2] + '.' + parts[3]);
-
-         return degrees + minutes / 60 + seconds / 3600;
-      }
-
-      function startWatchPosition() {
-         if (navigator.geolocation) {
-            audio.play();
-            var options = {
-               enableHighAccuracy: true,
-               timeout: 5000,
-               maximumAge: 0,// 1で0.001秒
-            };
-            id = navigator.geolocation.watchPosition(success, error, options);
-         } else {
-            alert("このブラウザは位置情報をサポートしていません。");
-         }
-      }
-      
-      function clearWatchPosition() {
-         if ( id != undefined ) {
-            navigator.geolocation.clearWatch(id);
-            id = null;
-         }
-         if ( marker != undefined )  marker.setMap(null);
-         if ( circle != undefined )  circle.setMap(null);
-      }
-
-      function success(pos) {
-         var crd = pos.coords;
-         var timeStamp = new Date(pos.timestamp).toLocaleTimeString();
-         var currentPos = new google.maps.LatLng(crd.latitude, crd.longitude);
-
-         if (marker !== undefined) marker.setMap(null);
-         if (circle !== undefined) circle.setMap(null);
-
-         marker = new google.maps.Marker({ position: currentPos, map: map });
-
-         circle = new google.maps.Circle({
-            strokeColor: "#3333FF",
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillColor: "#3333FF",
-            fillOpacity: 0.35,
-            map: map,
-            draggable: false,
-            center: currentPos,
-            radius: crd.accuracy
-         });
-
-         map.setCenter(currentPos);
-         map.setZoom(14);
-         setInfo(timeStamp, crd.latitude, crd.longitude, crd.accuracy);
-
-         checkDistance(crd.latitude, crd.longitude);
-      }
-
-      function error(err) {
-         document.getElementById('tdErrCd').innerHTML = err.code;
-         document.getElementById('tdErrMg').innerHTML = err.message;
-      }
-
-      function setInfo(timeStamp, latitude, longitude, accuracy) {
-         var tableRef = document.getElementById('tblGps');
-         var newRow = tableRef.insertRow(1);
-         var newCellTime = newRow.insertCell(0);
-         var newCellLat = newRow.insertCell(1);
-         var newCellLng = newRow.insertCell(2);
-         var newCellAcr = newRow.insertCell(3);
-         newCellTime.innerHTML = timeStamp;
-         newCellLat.innerHTML = latitude;
-         newCellLng.innerHTML = longitude;
-         newCellAcr.innerHTML = accuracy;
-      }
-
-      function checkDistance(userLat, userLon) {
-         var csvFile = "https://raw.githubusercontent.com/project-team-F/team-F/main/data.csv";
-         fetch(csvFile)
-            .then(response => response.text())
-            .then(data => {
-               var rows = data.split("\n");
-               for (var i = 0; i < rows.length; i++) {
-                  var cols = rows[i].split(",");
-                  var latitudeStr = cols[0];
-                  var longitudeStr = cols[1];
-                  var latitude = convertPeriodToDMS(latitudeStr);
-                  var longitude = convertPeriodToDMS(longitudeStr);
-                  if (!isNaN(latitude) && !isNaN(longitude)) {
-                     var distance = calculateDistance(userLat, userLon, latitude, longitude);
-                     if (distance < 0.1) { // 100メートル以内の場合（0.1キロメートル）
-                        console.log(distance);
-                        audio2.play(); // 通知の許可を要求
-                        notificationShown = true;
-                     }
-                  }
-               }
-            });
-      }
-      
-      /*function requestNotificationPermission() {
-         if ('Notification' in window) {
-            if (Notification.permission !== 'granted') {
-               Notification.requestPermission(function (permission) {
-                  if (permission === 'granted') {
-                     showNotification("この先に注意してください"); // 通知メッセージを表示
-                     audio.play(); // 音声を再生
-                  }
+            if (!isNaN(latitude) && !isNaN(longitude)) {
+               var location = new google.maps.LatLng(latitude, longitude);
+               var marker = new google.maps.Marker({
+                  position: location,
+                  map: map
                });
-            } else {
-               showNotification("この先に注意してください"); // 通知メッセージを表示
-               audio.play(); // 音声を再生
             }
          }
-      }
-      
-      function showNotification(message) {
-         if ('Notification' in window) {
-            if (Notification.permission === 'granted') {
-               new Notification(message);
-            }
-         }
-      }*/
+      });
+}
 
-      function calculateDistance(lat1, lon1, lat2, lon2) {
-         var radlat1 = (Math.PI * lat1) / 180;
-         var radlat2 = (Math.PI * lat2) / 180;
-         var radlon1 = (Math.PI * lon1) / 180;
-         var radlon2 = (Math.PI * lon2) / 180;
-         var theta = lon1 - lon2;
-         var radtheta = (Math.PI * theta) / 180;
-         var dist =
-            Math.sin(radlat1) * Math.sin(radlat2) +
-            Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-         dist = Math.acos(dist);
-         dist = (dist * 180) / Math.PI;
-         dist = dist * 60 * 1.1515 * 1.609344;
-         return dist;
-      }
-   </script>
-   <link rel="stylesheet" href="style.css">
+function convertPeriodToDMS(periodString) {
+   var parts = periodString.split('.');
+   if (parts.length !== 4) return NaN;
+
+   var degrees = parseInt(parts[0]);
+   var minutes = parseInt(parts[1]);
+   var seconds = parseFloat(parts[2] + '.' + parts[3]);
+
+   return degrees + minutes / 60 + seconds / 3600;
+}
+
+function startWatchPosition() {
+   if (navigator.geolocation) {
+      audio.play();
+      var options = {
+         enableHighAccuracy: true,
+         timeout: 5000,
+         maximumAge: 0,
+      };
+      id = navigator.geolocation.watchPosition(success, error, options);
+   } else {
+      alert("このブラウザは位置情報をサポートしていません。");
+   }
+}
+
+function clearWatchPosition() {
+   if ( id != undefined ) {
+      navigator.geolocation.clearWatch(id);
+      id = null;
+   }
+   if ( marker != undefined )  marker.setMap(null);
+   if ( circle != undefined )  circle.setMap(null);
+   playCount = 0; // 追跡を終了したら再生回数をリセット
+}
+
+function success(pos) {
+   var crd = pos.coords;
+   var timeStamp = new Date(pos.timestamp).toLocaleTimeString();
+   var currentPos = new google.maps.LatLng(crd.latitude, crd.longitude);
+
+   if (marker !== undefined) marker.setMap(null);
+   if (circle !== undefined) circle.setMap(null);
+
+   marker = new google.maps.Marker({ position: currentPos, map: map });
+
+   circle = new google.maps.Circle({
+      strokeColor: "#3333FF",
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: "#3333FF",
+      fillOpacity: 0.35,
+      map: map,
+      draggable: false,
+      center: currentPos,
+      radius: crd.accuracy
+   });
+
+   map.setCenter(currentPos);
+   map.setZoom(14);
+   setInfo(timeStamp, crd.latitude, crd.longitude, crd.accuracy);
+
+   checkDistance(crd.latitude, crd.longitude);
+}
+
+function error(err) {
+   document.getElementById('tdErrCd').innerHTML = err.code;
+   document.getElementById('tdErrMg').innerHTML = err.message;
+}
+
+function setInfo(timeStamp, latitude, longitude, accuracy) {
+   var tableRef = document.getElementById('tblGps');
+   var newRow = tableRef.insertRow(1);
+   var newCellTime = newRow.insertCell(0);
+   var newCellLat = newRow.insertCell(1);
+   var newCellLng = newRow.insertCell(2);
+   var newCellAcr = newRow.insertCell(3);
+   newCellTime.innerHTML = timeStamp;
+   newCellLat.innerHTML = latitude;
+   newCellLng.innerHTML = longitude;
+   newCellAcr.innerHTML = accuracy;
+}
+
+function checkDistance(userLat, userLon) {
+   var csvFile = "https://raw.githubusercontent.com/project-team-F/team-F/main/data.csv";
+   fetch(csvFile)
+      .then(response => response.text())
+      .then(data => {
+         var rows = data.split("\n");
+         for (var i = 0; i < rows.length; i++) {
+            var cols = rows[i].split(",");
+            var latitudeStr = cols[0];
+            var longitudeStr = cols[1];
+            var latitude = convertPeriodToDMS(latitudeStr);
+            var longitude = convertPeriodToDMS(longitudeStr);
+            if (!isNaN(latitude) && !isNaN(longitude)) {
+               var distance = calculateDistance(userLat, userLon, latitude, longitude);
+               if (distance < 0.1) { // 100メートル以内の場合（0.1キロメートル）
+                  console.log(distance);
+                  play2(); // play2関数を呼び出すよう変更
+                  notificationShown = true;
+               }
+            }
+         }
+      });
+}
+
+function calculateDistance(lat1, lon1, lat2, lon2) {
+   var radlat1 = (Math.PI * lat1) / 180;
+   var radlat2 = (Math.PI * lat2) / 180;
+   var radlon1 = (Math.PI * lon1) / 180;
+   var radlon2 = (Math.PI * lon2) / 180;
+   var theta = lon1 - lon2;
+   var radtheta = (Math.PI * theta) / 180;
+   var dist =
+      Math.sin(radlat1) * Math.sin(radlat2) +
+      Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+   dist = Math.acos(dist);
+   dist = (dist * 180) / Math.PI;
+   dist = dist * 60 * 1.1515 * 1.609344;
+   return dist;
+}
+</script>
+<link rel="stylesheet" href="style.css">
 </body>
 </html>
