@@ -74,7 +74,7 @@ function play() {
 function play2() {
    audio2.play();
    playCount++; // 再生回数をインクリメント
-   if (playCount >= 2) { // 2回以上再生された場合は再生を停止
+   if (playCount > 2) { // 2回以上再生された場合は再生を停止
       audio2.pause();
       audio2.currentTime = 0;
    }
