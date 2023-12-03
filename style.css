@@ -3,10 +3,11 @@ body{
      margin: 0;
      padding: 0;
      box-sizing: border-box;
-     background-color: #efe3d9;
+     background-color: #f5ede8;
      color: #495057;
  }
- 
+
+
  div.button{
      text-align: center;
      margin-top: 45px;
@@ -19,24 +20,26 @@ body{
      padding: 0.3em 1em;
      text-decoration: none;
      color: #5a5b63;
-     border: solid 2px #3f3c3c;
+     border: solid 2px #2280f4;
      border-radius: 3px;
      transition: .4s;
-     background: #4d4a4a;
-     color: white;
+     background: #6d9bf0;
+     color: rgb(0, 0, 0);
+     font-weight: 1000;
    }
  
  header {
-     background-color: #8fa4f6;
+     background-color: #fcae5f;
      color: rgb(0, 0, 0);
      text-align: center;
      padding: 0.1em;
  }
  
  h1 {
-    font-size: 38px;
-    font-family:sans-serif;
+    font-size: 40px;
+    font-family:monospace;
 }
+
  
  main {
      text-align: center;
@@ -57,7 +60,7 @@ body{
      font-size: 30px;
  }
  
- .intro-section p {
+p {
      font-size: 1.2em;
      color: #6c757d;
      margin-bottom: 1em;
@@ -71,6 +74,8 @@ body{
      margin: 0.5em;
      cursor: pointer;
      transition: background-color 0.3s ease;
+     font-weight: bolder;
+
  }
  
  .primary {
@@ -79,9 +84,10 @@ body{
  }
  
  .secondary {
-     background-color: #ffffff;
-     color: #007bff;
-     border: 2px solid #007bff;
+     background-color: #6d9bf0;
+     color: #13151b;
+     border: 2px solid #2280f4;
+
  }
  
  .cta-button:hover {
@@ -107,8 +113,8 @@ body{
  }
  
  footer {
-     background-color: #8fa4f6;
-     color: white;
+     background-color: #fb942e;
+     color: rgb(0, 0, 0);
      text-align: center;
      padding: 1em;
  }
