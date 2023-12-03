@@ -110,10 +110,11 @@ p {
  
  .feature h3 {
      color: #000000;
+     font-size:25px;
  }
  
  footer {
-     background-color: #fb942e;
+     background-color: #fcae5f;
      color: rgb(0, 0, 0);
      text-align: center;
      padding: 1em;
