@@ -135,7 +135,7 @@ function startWatchPosition() {
       var options = {
          enableHighAccuracy: true,
          timeout: 5000,
-         maximumAge: 0,
+         maximumAge: 1000,
       };
       id = navigator.geolocation.watchPosition(success, error, options);
    } else {
