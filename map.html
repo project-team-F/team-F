@@ -217,14 +217,12 @@ function checkDistance(userLat, userLon) {
             var longitude = convertPeriodToDMS(longitudeStr);
             if (!isNaN(latitude) && !isNaN(longitude)) {
                var distance = calculateDistance(userLat, userLon, latitude, longitude);
-               if (distance.some(item => item < 0.1)) { // 100メートル以内の場合（0.1キロメートル）
+               if (distance < 0.1) { // 100メートル以内の場合（0.1キロメートル）
                   console.log(distance);
                   play2(); // play2関数を呼び出すよう変更
                   notificationShown = true;
-               } 
-               if (distance.every(item => item >= 0.1)) { //distanceのすべての要素が0.1以上の数か判定
+               } else {
                   playCount = 0;
-                  console.log('危険箇所から離れました');
                }
             }
          }
