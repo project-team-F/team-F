@@ -73,13 +73,13 @@ function play() {
 
 function play2() {
    audio2.play();
-   /*playCount++; // 再生回数をインクリメント
-   if (playCount >= 2) { // 2回以上再生された場合は再生を停止
-      audio2.pause();
-      audio2.currentTime = 0;*/
-   if (audio2.ended()) { //5秒後に再生を停止
+   playCount++; // 再生回数をインクリメント
+   if (playCount >= 5) { // 2回以上再生された場合は再生を停止
       audio2.pause();
       audio2.currentTime = 0;
+   /*if (audio2.ended()) { //5秒後に再生を停止
+      audio2.pause();
+      audio2.currentTime = 0;*/
    }
 }
 
