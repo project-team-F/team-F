@@ -222,7 +222,7 @@ function checkDistance(userLat, userLon) {
                   play2(); // play2関数を呼び出すよう変更
                   notificationShown = true;
                } 
-               if (distance.every((item) => item >= 0.1)) { //distanceのすべての要素が0.1以上の数か判定
+               if (distance.every(item => item >= 0.1)) { //distanceのすべての要素が0.1以上の数か判定
                   playCount = 0;
                }
             }
